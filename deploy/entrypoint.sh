@@ -36,5 +36,14 @@ if [ "${RUN_SEED:-0}" = "1" ]; then
   python manage.py seed_features
 fi
 
+# สร้างบัญชีผู้ดูแล (superuser) จาก env ถ้าตั้งไว้ — idempotent (ข้ามถ้ามีแล้ว)
+# ต้องตั้ง: DJANGO_SUPERUSER_USERNAME, DJANGO_SUPERUSER_PASSWORD, DJANGO_SUPERUSER_EMAIL
+if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; then
+  echo "[entrypoint] ตรวจ/สร้างบัญชีผู้ดูแล ($DJANGO_SUPERUSER_USERNAME) ..."
+  python manage.py createsuperuser --noinput 2>/dev/null \
+    && echo "  ✔ สร้าง superuser สำเร็จ" \
+    || echo "  (superuser มีอยู่แล้ว — ข้าม)"
+fi
+
 echo "[entrypoint] เริ่มบริการ: $*"
 exec "$@"
