@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}สรุปยอด{% endblock %}
+{% block heading %}สรุปยอด (ขาย + ซื้อ){% endblock %}
+{% block crumb %}รายงาน / สรุปยอด{% endblock %}
+{% block content %}
+<div class="card">
+  <form method="get" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+    <div><label>ช่วงเวลา</label><select name="period">
+      <option value="day" {% if period == 'day' %}selected{% endif %}>รายวัน</option>
+      <option value="month" {% if period == 'month' %}selected{% endif %}>รายเดือน</option>
+      <option value="year" {% if period == 'year' %}selected{% endif %}>รายปี</option></select></div>
+    <div><label>วันที่อ้างอิง</label><input type="date" name="ref" value="{{ ref }}"></div>
+    <button class="btn" type="submit">แสดง</button>
+  </form>
+</div>
+<div class="grid g2">
+  <div class="card">
+    <h3>สรุปยอดขาย <span class="pill">{{ ms_no }}</span></h3>
+    <div class="cl"><span>จำนวนบิล</span><b>{{ sell_n }}</b></div>
+    <div class="cl"><span>VAT</span><b>{{ sell_vat|floatformat:2 }}</b></div>
+    <div class="cl grand"><span>ยอดขายรวม</span><span class="amt gold">฿ {{ sell_total|floatformat:2 }}</span></div>
+  </div>
+  <div class="card">
+    <h3>สรุปยอดซื้อ <span class="pill">{{ mb_no }}</span></h3>
+    <div class="cl"><span>จำนวนบิล</span><b>{{ buy_n }}</b></div>
+    <div class="cl grand"><span>ยอดรับซื้อรวม</span><span class="amt gold">฿ {{ buy_total|floatformat:2 }}</span></div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<style>
+@page { size: {{ page_size }}; margin: 10mm 12mm; }
+* { box-sizing:border-box; }
+body { font-family:'Garuda','Kinnari',sans-serif; font-size:12px; color:#111; margin:0; }
+.head { display:flex; justify-content:space-between; border-bottom:2px solid #b8892f; padding-bottom:8px; margin-bottom:10px; }
+.company { font-size:11px; line-height:1.35; }
+.company .name { font-size:16px; font-weight:bold; color:#8a621f; }
+.doc { text-align:right; font-size:11px; }
+.doc .title { font-size:15px; font-weight:bold; }
+.doc .no { color:#8a621f; font-weight:bold; }
+.meta { display:flex; justify-content:space-between; font-size:11px; margin:8px 0; }
+.box { border:1px solid #ccc; border-radius:6px; padding:8px 10px; margin:8px 0; }
+table { width:100%; border-collapse:collapse; font-size:11px; margin-top:6px; }
+th,td { border:1px solid #ddd; padding:5px 7px; text-align:left; }
+th { background:#f4ecd6; }
+.r { text-align:right; }
+.tot { margin-top:10px; width:55%; margin-left:45%; }
+.tot td { border:none; padding:3px 6px; }
+.tot .grand td { border-top:2px solid #b8892f; font-size:15px; font-weight:bold; color:#8a621f; padding-top:6px; }
+.foot { margin-top:26px; display:flex; justify-content:space-between; font-size:11px; }
+.sign { text-align:center; width:40%; }
+.sign .line { margin-top:34px; border-top:1px dotted #999; padding-top:4px; }
+.muted { color:#777; }
+.badge { display:inline-block; background:#b8892f; color:#fff; padding:1px 8px; border-radius:10px; font-size:10px; }
+</style></head>
+<body>
+  <div class="head">
+    <div class="company">
+      <div class="name">{{ company.name|default:"ONG หลอมทอง" }}</div>
+      {{ company.address }}<br>
+      เลขผู้เสียภาษี {{ company.tax_id }} · โทร {{ company.tel }}
+    </div>
+    <div class="doc">
+      <div class="title">{% block doc_title %}{% endblock %}</div>
+      เลขที่: <span class="no">{% block doc_no %}{% endblock %}</span><br>
+      วันที่: {% block doc_date %}{% endblock %}
+    </div>
+  </div>
+  {% block body %}{% endblock %}
+  <div class="foot">
+    <div class="sign"><div class="line">ผู้รับเงิน / เจ้าหน้าที่</div></div>
+    <div class="sign"><div class="line">ลูกค้า</div></div>
+  </div>
+</body></html>

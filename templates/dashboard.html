@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}แดชบอร์ด — ONG หลอมทอง{% endblock %}
+{% block heading %}แดชบอร์ด{% endblock %}
+{% block crumb %}หน้าแรก / ภาพรวม{% endblock %}
+{% block content %}
+<div class="grid g4">
+  <div class="card stat"><div class="lab">ยอดขายวันนี้</div><div class="val gold">฿ {{ sales_today|floatformat:0 }}</div></div>
+  <div class="card stat"><div class="lab">ยอดรับซื้อวันนี้</div><div class="val gold">฿ {{ buy_today|floatformat:0 }}</div></div>
+  <div class="card stat"><div class="lab">ลูกค้าใหม่วันนี้</div><div class="val gold">{{ new_customers }} ราย</div></div>
+  <div class="card stat"><div class="lab">ลูกค้าทั้งหมด</div><div class="val gold">{{ total_customers }} ราย</div></div>
+</div>
+<div class="grid g2">
+  <div class="card">
+    <h3>ราคาทองวันนี้</h3>
+    {% if gold %}
+    <div class="cl"><span>ทองคำแท่ง 96.5% ขายออก</span><b class="gold">{{ gold.bar_sell|floatformat:0 }}</b></div>
+    <div class="cl"><span>ทองคำแท่ง 96.5% รับซื้อ</span><b class="gold">{{ gold.bar_buy|floatformat:0 }}</b></div>
+    <div class="cl"><span>ทองรูปพรรณ รับซื้อ</span><b class="gold">{{ gold.jewelry_buy|floatformat:0 }}</b></div>
+    {% else %}<p class="muted">ยังไม่ได้ตั้งราคาทอง — ไปที่ Admin → ราคาทองรายวัน</p>{% endif %}
+  </div>
+  <div class="card">
+    <h3>สต็อกคงเหลือ</h3>
+    {% for s in stock %}<div class="cl"><span>{{ s.metal }}</span><b>{{ s.g|floatformat:3 }} ก.</b></div>{% endfor %}
+  </div>
+</div>
+<div class="card">
+  <h3>ขายฝากที่ยังไม่ไถ่ (ล่าสุด)</h3>
+  {% if pawn_due %}<table><thead><tr><th>เลขที่สัญญา</th><th>ลูกค้า</th><th>เงินต้น</th><th>ครบกำหนด</th></tr></thead><tbody>
+  {% for c in pawn_due %}<tr><td>{{ c.doc_no|default:c.pk }}</td><td>{{ c.customer.name_th }}</td><td>{{ c.principal|floatformat:0 }}</td><td>{{ c.due_date|default:"-" }}</td></tr>{% endfor %}
+  </tbody></table>{% else %}<p class="muted">ยังไม่มีสัญญาขายฝากค้าง</p>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+<div class="calcbox">
+  <div class="cl"><span>เงินต้นขายฝาก</span><b>{{ principal|floatformat:2 }}</b></div>
+  <div class="cl"><span>ดอกเบี้ย {{ rate }}% × {{ months }} เดือน</span><b>{{ interest|floatformat:2 }}</b></div>
+  {% if due %}<div class="cl"><span>วันครบกำหนด</span><b>{{ due }}</b></div>{% endif %}
+  <div class="cl grand"><span>ยอดไถ่ถอนเมื่อครบกำหนด</span><span class="amt gold">฿ {{ total|floatformat:2 }}</span></div>
+</div>

@@ -1,0 +1,24 @@
+{% extends "print/base_print.html" %}
+{% block doc_title %}สัญญาขายฝาก{% endblock %}
+{% block doc_no %}{{ c.doc_no }}{% endblock %}
+{% block doc_date %}{{ c.date }}{% endblock %}
+{% block body %}
+<div class="box">
+  <b>ผู้ขายฝาก (ลูกค้า):</b> {{ c.customer.name_th }}
+  {% if c.customer.national_id %} · เลขบัตร {{ c.customer.national_id }}{% endif %}<br>
+  <span class="muted">{{ c.customer.address }}</span>
+</div>
+<table>
+  <thead><tr><th>ทรัพย์สินที่ขายฝาก</th><th class="r">น้ำหนัก (ก.)</th><th class="r">ราคาประเมิน</th></tr></thead>
+  <tbody><tr><td>{{ c.metal.name_th }}</td><td class="r">{{ c.weight_gram }}</td><td class="r">{{ c.cost_assessment|floatformat:2 }}</td></tr></tbody>
+</table>
+<table class="tot">
+  <tr><td>เงินต้นขายฝาก</td><td class="r">{{ c.principal|floatformat:2 }}</td></tr>
+  <tr><td>อัตราดอกเบี้ย</td><td class="r">{{ c.interest.rate }}% / เดือน</td></tr>
+  <tr><td>ระยะเวลา</td><td class="r">{{ c.duration.months }} เดือน</td></tr>
+  <tr><td>วันครบกำหนดไถ่ถอน</td><td class="r">{{ c.due_date }}</td></tr>
+  <tr><td>ดอกเบี้ยเมื่อครบกำหนด</td><td class="r">{{ interest|floatformat:2 }}</td></tr>
+  <tr class="grand"><td>ยอดไถ่ถอนรวม</td><td class="r">฿ {{ total|floatformat:2 }}</td></tr>
+</table>
+<p class="muted" style="font-size:10.5px;margin-top:10px">* ผู้ขายฝากมีสิทธิ์ไถ่ถอนภายในกำหนด หากพ้นกำหนดถือว่าหลุดเป็นสิทธิ์ของผู้รับซื้อฝากตามกฎหมาย</p>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "print/base_print.html" %}
+{% block doc_title %}{% if bill.bill_type == 'buy' %}ใบรับซื้อสินค้า{% else %}ใบกำกับภาษี{% if not bill.full_tax_invoice %}อย่างย่อ{% endif %} (ขาย){% endif %}{% endblock %}
+{% block doc_no %}{{ bill.doc_no }}{% endblock %}
+{% block doc_date %}{{ bill.date }} {{ bill.time }}{% endblock %}
+{% block body %}
+<div class="meta">
+  <div><b>ลูกค้า:</b> {{ bill.customer.name_th|default:"ลูกค้าทั่วไป" }}
+    {% if bill.customer.national_id %}<br><span class="muted">เลขบัตร/ผู้เสียภาษี: {{ bill.customer.national_id }}</span>{% endif %}
+    {% if bill.customer.address %}<br><span class="muted">{{ bill.customer.address }}</span>{% endif %}</div>
+  <div class="r"><b>ราคาทองอ้างอิง:</b> {{ bill.gold_price_ref|floatformat:2 }}<br>
+    <b>ชำระโดย:</b> {% for p in bill.payments.all %}{{ p.get_method_display }}{% if not forloop.last %}, {% endif %}{% endfor %}</div>
+</div>
+<table>
+  <thead><tr><th>รายการ</th><th class="r">%</th><th class="r">น้ำหนัก (ก.)</th><th class="r">ราคา/กรัม</th><th class="r">ค่ากำเหน็จ</th><th class="r">จำนวนเงิน</th></tr></thead>
+  <tbody>
+  {% for d in bill.details.all %}
+    <tr><td>{{ d.metal.name_th }}{% if d.product_item %} · {{ d.product_item.name }}{% endif %}</td>
+      <td class="r">{{ d.purity_percent }}</td><td class="r">{{ d.weight_gram }}</td>
+      <td class="r">{{ d.price_per_gram|floatformat:2 }}</td><td class="r">{{ d.labor_cost|floatformat:2 }}</td>
+      <td class="r">{{ d.amount|floatformat:2 }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<table class="tot">
+  {% if bill.vat_amount %}
+  <tr><td>ยอดก่อนภาษี</td><td class="r">{{ subtotal|floatformat:2 }}</td></tr>
+  <tr><td>ภาษีมูลค่าเพิ่ม 7% (จากส่วนต่าง/ค่ากำเหน็จ)</td><td class="r">{{ bill.vat_amount|floatformat:2 }}</td></tr>
+  {% endif %}
+  <tr class="grand"><td>รวมทั้งสิ้น</td><td class="r">฿ {{ bill.total_amount|floatformat:2 }}</td></tr>
+</table>
+{% endblock %}

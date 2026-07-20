@@ -1,0 +1,6 @@
+<div class="calcbox">
+  <div class="cl"><span>ราคาต่อกรัม <span class="muted">({{ metal.name_th }} @ {{ base|floatformat:2 }})</span></span><b>{{ r.price_per_gram|floatformat:2 }}</b></div>
+  <div class="cl"><span>ยอดก่อนหัก (×{{ weight }} ก.)</span><b>{{ r.subtotal|floatformat:2 }}</b></div>
+  <div class="cl"><span>ค่าบริการ {% if r.fee_applied %}{{ fee }}%{% else %}ไม่หัก{% endif %}</span><b>{% if r.fee_applied %}- {{ r.fee_amount|floatformat:2 }}{% else %}0.00{% endif %}</b></div>
+  <div class="cl grand"><span>ยอดสุทธิ</span><span class="amt gold">฿ {{ r.final|floatformat:2 }}</span></div>
+</div>

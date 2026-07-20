@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}รายงานการเงิน{% endblock %}
+{% block heading %}รายงานการเงิน (แยกช่องทางชำระ){% endblock %}
+{% block crumb %}รายงาน / การเงิน{% endblock %}
+{% block content %}
+<div class="card">
+  <form method="get" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+    <div><label>ช่วงเวลา</label><select name="period">
+      <option value="day" {% if period == 'day' %}selected{% endif %}>รายวัน</option>
+      <option value="month" {% if period == 'month' %}selected{% endif %}>รายเดือน</option>
+      <option value="year" {% if period == 'year' %}selected{% endif %}>รายปี</option></select></div>
+    <div><label>วันที่อ้างอิง</label><input type="date" name="ref" value="{{ ref }}"></div>
+    <button class="btn" type="submit">แสดง</button>
+  </form>
+</div>
+<div class="card">
+  <h3>สรุปการชำระเงิน — {{ label }}</h3>
+  <table><thead><tr><th>วิธีชำระ</th><th style="text-align:right">จำนวนบิล</th><th style="text-align:right">ยอดเงิน</th><th style="text-align:right">ค่าธรรมเนียม</th></tr></thead><tbody>
+  {% for r in rows %}<tr><td>{{ r.name }}</td><td style="text-align:right">{{ r.n }}</td>
+    <td style="text-align:right">{{ r.total|floatformat:2 }}</td><td style="text-align:right">{{ r.fee|floatformat:2 }}</td></tr>
+  {% empty %}<tr><td colspan="4" class="muted">ไม่มีรายการ</td></tr>{% endfor %}</tbody></table>
+  <div class="cl grand" style="margin-top:12px"><span>รวมทั้งสิ้น (ค่าธรรมเนียม {{ grand_fee|floatformat:2 }})</span><span class="amt gold">฿ {{ grand_total|floatformat:2 }}</span></div>
+</div>
+{% endblock %}

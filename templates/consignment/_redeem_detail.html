@@ -1,0 +1,8 @@
+<div class="calcbox">
+  <div class="cl"><span>สัญญา</span><b>{{ c.doc_no|default:c.pk }}</b></div>
+  <div class="cl"><span>ลูกค้า</span><b>{{ c.customer.name_th }}</b></div>
+  <div class="cl"><span>เงินต้น</span><b>{{ c.principal|floatformat:2 }}</b></div>
+  <div class="cl"><span>ดอกเบี้ยรับ ({{ c.interest.rate }}% × {{ c.duration.months }} ด.)</span><b>{{ interest|floatformat:2 }}</b></div>
+  <div class="cl"><span>ค่าธรรมเนียมรับ</span><b>{{ fee|floatformat:2 }}</b></div>
+  <div class="cl grand"><span>รวมที่ต้องชำระเพื่อไถ่ออก</span><span class="amt gold">฿ {{ total|floatformat:2 }}</span></div>
+</div>

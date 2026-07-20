@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}รายงานบัญชี (ปิดเลขบัตร){% endblock %}
+{% block heading %}รายงานบัญชี — ลูกค้ามาขาย (ปิดเลขบัตร){% endblock %}
+{% block crumb %}รายงาน / บัญชี (PDPA){% endblock %}
+{% block content %}
+<div class="card">
+  <form method="get" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+    <div><label>ช่วงเวลา</label>
+      <select name="period">
+        <option value="day" {% if period == 'day' %}selected{% endif %}>รายวัน</option>
+        <option value="month" {% if period == 'month' %}selected{% endif %}>รายเดือน</option>
+        <option value="year" {% if period == 'year' %}selected{% endif %}>รายปี</option>
+      </select></div>
+    <div><label>วันที่อ้างอิง</label><input type="date" name="ref" value="{{ ref }}"></div>
+    <button class="btn" type="submit">แสดง</button>
+    <a class="btn ghost" href="{% url 'report_accounting_pdf' %}?period={{ period }}&ref={{ ref }}&size=A4" target="_blank">🖨️ พิมพ์ PDF (A4)</a>
+  </form>
+  <p class="muted" style="font-size:12px;margin-top:8px">🔒 แสดงเฉพาะชื่อ + เลขบัตรแบบปิดบัง (4 ตัวท้าย) เพื่อส่งบัญชีอย่างปลอดภัยตาม PDPA — {{ label }}</p>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>#</th><th>เลขที่</th><th>วันที่</th><th>ชื่อลูกค้า</th><th>เลขบัตร (ปิดบัง)</th><th class="r" style="text-align:right">จำนวนเงิน</th></tr></thead>
+    <tbody>
+    {% for b in bills %}
+      <tr><td>{{ forloop.counter }}</td><td>{{ b.doc_no }}</td><td>{{ b.date }}</td>
+        <td>{{ b.customer.name_th|default:"ลูกค้าทั่วไป" }}</td>
+        <td>{{ b.customer.masked_national_id|default:"—" }}</td>
+        <td style="text-align:right">{{ b.total_amount|floatformat:2 }}</td></tr>
+    {% empty %}<tr><td colspan="6" class="muted">ไม่มีรายการในช่วงนี้</td></tr>{% endfor %}
+    </tbody>
+  </table>
+  <div class="cl grand" style="margin-top:12px"><span>รวมรับซื้อ ({{ label }})</span><span class="amt gold">฿ {{ total|floatformat:2 }}</span></div>
+</div>
+{% endblock %}

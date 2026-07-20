@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}เพิ่มลูกค้า{% endblock %}
+{% block heading %}เพิ่มลูกค้าใหม่ (KYC){% endblock %}
+{% block crumb %}ข้อมูล / ลูกค้า / เพิ่มใหม่{% endblock %}
+{% block content %}
+<form method="post" action="{% url 'customer_add' %}" enctype="multipart/form-data">{% csrf_token %}
+<div class="grid g2">
+  <div class="card">
+    <h3>ข้อมูลบัตรประชาชน</h3>
+    <div class="row row-2">
+      <div><label>เลขบัตรประชาชน *</label><input name="national_id" maxlength="13" placeholder="13 หลัก"></div>
+      <div><label>ยศสมาชิก</label><select name="member_rank"><option value="">— ทั่วไป —</option>
+        {% for r in ranks %}<option value="{{ r.id }}">{{ r.name }}</option>{% endfor %}</select></div>
+    </div>
+    <div class="row row-2">
+      <div><label>ชื่อ-นามสกุล (ไทย) *</label><input name="name_th"></div>
+      <div><label>ชื่อ-นามสกุล (อังกฤษ)</label><input name="name_en"></div>
+    </div>
+    <div class="row row-3">
+      <div><label>วันเดือนปีเกิด</label><input name="birthday" placeholder="1 ม.ค. 2540"></div>
+      <div><label>ศาสนา</label><input name="religion"></div>
+      <div><label>เบอร์โทร</label><input name="tel"></div>
+    </div>
+    <label>ที่อยู่</label><textarea name="address" rows="2"></textarea>
+    <div class="row row-2" style="margin-top:8px">
+      <div><label>เป็น VIP (ไม่หักค่าบริการ)</label><select name="is_vip"><option value="0">ไม่</option><option value="1">ใช่</option></select></div>
+      <div><label>รูปบัตร/รูปเพิ่ม (เลือกได้หลายรูป)</label><input name="images" type="file" accept="image/*" multiple></div>
+    </div>
+    <button class="btn wide" type="submit" style="margin-top:14px">บันทึกลูกค้า</button>
+  </div>
+  <div class="card">
+    <h3>อ่านบัตรอัตโนมัติ</h3>
+    <p class="muted" style="font-size:13px">เสียบบัตรที่เครื่องอ่าน แล้วกดปุ่มด้านล่าง — ระบบจะเติมฟอร์มให้อัตโนมัติผ่าน Local Bridge</p>
+    <button type="button" class="btn wide" onclick="readCard()">🪪 อ่านบัตรประชาชน</button>
+    <div class="calcbox" style="margin-top:12px"><div class="cl"><span>สถานะ</span><b id="cardStatus" class="muted">พร้อม (ต้องรัน Card Reader Bridge)</b></div></div>
+  </div>
+</div>
+</form>
+<script>
+function setV(name,val){const el=document.querySelector(`[name="${name}"]`);if(el&&val)el.value=val;}
+async function readCard(){
+  const st=document.getElementById('cardStatus');st.textContent='กำลังอ่านบัตร...';
+  try{
+    const res=await fetch('http://127.0.0.1:8765/read',{cache:'no-store'});
+    const j=await res.json();
+    if(!j.ok){st.textContent='อ่านไม่สำเร็จ: '+(j.error||'ไม่ทราบสาเหตุ');st.style.color='#ff6b6b';return;}
+    const d=j.data;
+    setV('national_id',d.national_id);setV('name_th',d.name_th);setV('name_en',d.name_en);
+    setV('birthday',d.birthday);setV('address',d.address);
+    st.textContent='อ่านสำเร็จ ✓ เติมฟอร์มแล้ว ('+d.name_th+')';st.style.color='#57d38c';
+  }catch(e){
+    st.textContent='เชื่อมต่อ Bridge ไม่ได้ — ตรวจว่ารัน card_reader.py แล้ว (ยังกรอกมือได้)';st.style.color='#ffb454';
+  }
+}
+</script>
+{% endblock %}

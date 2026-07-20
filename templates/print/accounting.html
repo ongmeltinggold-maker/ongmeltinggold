@@ -1,0 +1,19 @@
+{% extends "print/base_print.html" %}
+{% block doc_title %}รายงานบัญชี — ลูกค้ามาขาย{% endblock %}
+{% block doc_no %}(ปิดเลขบัตร · PDPA){% endblock %}
+{% block doc_date %}{{ label }}{% endblock %}
+{% block body %}
+<table>
+  <thead><tr><th>#</th><th>เลขที่</th><th>วันที่</th><th>ชื่อลูกค้า</th><th>เลขบัตร (ปิดบัง)</th><th class="r">จำนวนเงิน</th></tr></thead>
+  <tbody>
+  {% for b in bills %}
+    <tr><td>{{ forloop.counter }}</td><td>{{ b.doc_no }}</td><td>{{ b.date }}</td>
+      <td>{{ b.customer.name_th|default:"ลูกค้าทั่วไป" }}</td>
+      <td>{{ b.customer.masked_national_id|default:"—" }}</td>
+      <td class="r">{{ b.total_amount|floatformat:2 }}</td></tr>
+  {% empty %}<tr><td colspan="6">ไม่มีรายการ</td></tr>{% endfor %}
+  </tbody>
+</table>
+<table class="tot"><tr class="grand"><td>รวมรับซื้อ ({{ label }})</td><td class="r">฿ {{ total|floatformat:2 }}</td></tr></table>
+<p class="muted" style="font-size:10px;margin-top:8px">* เอกสารนี้ปิดบังเลขบัตรประชาชนและข้อมูลส่วนบุคคลอื่น เพื่อการส่งบัญชีตามหลัก PDPA</p>
+{% endblock %}

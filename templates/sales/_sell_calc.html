@@ -1,0 +1,6 @@
+<div class="calcbox">
+  <div class="cl"><span>มูลค่าเนื้อทอง (ยกเว้น VAT)</span><b>{{ r.gold_value|floatformat:2 }}</b></div>
+  <div class="cl"><span>ค่ากำเหน็จ</span><b>{{ r.labor|floatformat:2 }}</b></div>
+  <div class="cl"><span>VAT 7% (จากค่ากำเหน็จ)</span><b>{{ r.vat|floatformat:2 }}</b></div>
+  <div class="cl grand"><span>รวมชำระ</span><span class="amt gold">฿ {{ r.total|floatformat:2 }}</span></div>
+</div>

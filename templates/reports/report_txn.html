@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block heading %}{{ title }}{% endblock %}
+{% block crumb %}รายงาน / {{ title }} · เลขที่สรุป {{ doc_no }}{% endblock %}
+{% block content %}
+<div class="card">
+  <form method="get" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+    <div><label>ช่วงเวลา</label><select name="period">
+      <option value="day" {% if period == 'day' %}selected{% endif %}>รายวัน</option>
+      <option value="month" {% if period == 'month' %}selected{% endif %}>รายเดือน</option>
+      <option value="year" {% if period == 'year' %}selected{% endif %}>รายปี</option></select></div>
+    <div><label>วันที่อ้างอิง</label><input type="date" name="ref" value="{{ ref }}"></div>
+    <button class="btn" type="submit">แสดง</button>
+  </form>
+</div>
+<div class="grid g3">
+  <div class="card stat"><div class="lab">จำนวนบิล ({{ label }})</div><div class="val gold">{{ count }}</div></div>
+  <div class="card stat"><div class="lab">ยอดรวม</div><div class="val gold">฿ {{ total|floatformat:2 }}</div></div>
+  <div class="card stat"><div class="lab">VAT รวม</div><div class="val gold">฿ {{ vat|floatformat:2 }}</div></div>
+</div>
+<div class="card">
+  <table><thead><tr><th>#</th><th>เลขที่</th><th>วันที่</th><th>ลูกค้า</th><th style="text-align:right">ยอดเงิน</th></tr></thead><tbody>
+  {% for b in bills %}<tr><td>{{ forloop.counter }}</td><td>{{ b.doc_no }}</td><td>{{ b.date }}</td>
+    <td>{{ b.customer.name_th|default:"ทั่วไป" }}</td><td style="text-align:right">{{ b.total_amount|floatformat:2 }}</td></tr>
+  {% empty %}<tr><td colspan="5" class="muted">ไม่มีรายการในช่วงนี้</td></tr>{% endfor %}</tbody></table>
+</div>
+{% endblock %}

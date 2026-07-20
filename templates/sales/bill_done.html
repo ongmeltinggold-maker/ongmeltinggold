@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}บันทึกสำเร็จ{% endblock %}
+{% block heading %}บันทึกสำเร็จ{% endblock %}
+{% block crumb %}ธุรกรรม / ใบเสร็จ {{ bill.doc_no }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:640px">
+  <h3>{{ bill.get_bill_type_display }} — <span class="gold">{{ bill.doc_no }}</span></h3>
+  <div class="cl"><span>ลูกค้า</span><b>{{ bill.customer.name_th|default:"ลูกค้าทั่วไป" }}</b></div>
+  <div class="cl"><span>วันที่</span><b>{{ bill.date }} {{ bill.time }}</b></div>
+  {% if bill.vat_amount %}<div class="cl"><span>VAT</span><b>{{ bill.vat_amount|floatformat:2 }}</b></div>{% endif %}
+  <div class="cl grand"><span>รวมทั้งสิ้น</span><span class="amt gold">฿ {{ bill.total_amount|floatformat:2 }}</span></div>
+  <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+    <a class="btn" href="{% url 'bill_pdf' bill.pk %}?size=A5" target="_blank">🖨️ พิมพ์ A5</a>
+    <a class="btn" href="{% url 'bill_pdf' bill.pk %}?size=A4" target="_blank">🖨️ พิมพ์ A4</a>
+    <a class="btn ghost" href="{% url 'bill_pdf' bill.pk %}?size=A5&download=1" target="_blank">⬇ บันทึก PDF</a>
+    {% if bill.bill_type == 'buy' %}<a class="btn ghost" href="{% url 'buy' %}">＋ รับซื้อรายการใหม่</a>
+    {% else %}<a class="btn ghost" href="{% url 'sell' %}">＋ ขายรายการใหม่</a>{% endif %}
+  </div>
+</div>
+{% endblock %}

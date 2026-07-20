@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}ไถ่ถอนสำเร็จ{% endblock %}
+{% block heading %}ไถ่ถอนสำเร็จ{% endblock %}
+{% block crumb %}ธุรกรรม / ไถ่ออก / {{ rd.doc_no }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:640px">
+  <h3>ใบไถ่ถอน — <span class="gold">{{ rd.doc_no }}</span></h3>
+  <div class="cl"><span>ลูกค้า</span><b>{{ rd.contract.customer.name_th }}</b></div>
+  <div class="cl"><span>สัญญาอ้างอิง</span><b>{{ rd.contract.doc_no }}</b></div>
+  <div class="cl"><span>เงินต้น</span><b>{{ rd.principal|floatformat:2 }}</b></div>
+  <div class="cl"><span>ดอกเบี้ยรับ</span><b>{{ rd.interest_received|floatformat:2 }}</b></div>
+  <div class="cl grand"><span>รวมรับชำระ</span><span class="amt gold">฿ {{ rd.total|floatformat:2 }}</span></div>
+  <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+    <a class="btn" href="{% url 'redeem_pdf' rd.pk %}?size=A5" target="_blank">🖨️ พิมพ์ A5</a>
+    <a class="btn" href="{% url 'redeem_pdf' rd.pk %}?size=A4" target="_blank">🖨️ พิมพ์ A4</a>
+    <a class="btn ghost" href="{% url 'redeem' %}">＋ ไถ่ถอนรายการใหม่</a>
+  </div>
+</div>
+{% endblock %}

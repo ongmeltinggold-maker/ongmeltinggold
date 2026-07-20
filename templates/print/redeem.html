@@ -1,0 +1,16 @@
+{% extends "print/base_print.html" %}
+{% block doc_title %}ใบกำกับภาษี (ไถ่ถอน){% endblock %}
+{% block doc_no %}{{ rd.doc_no }}{% endblock %}
+{% block doc_date %}{{ rd.date }}{% endblock %}
+{% block body %}
+<div class="box">
+  <b>ลูกค้า:</b> {{ rd.contract.customer.name_th }}<br>
+  <span class="muted">อ้างอิงสัญญาขายฝากเลขที่ {{ rd.contract.doc_no }} · ทำเมื่อ {{ rd.contract.date }}</span>
+</div>
+<table class="tot">
+  <tr><td>เงินต้น</td><td class="r">{{ rd.principal|floatformat:2 }}</td></tr>
+  <tr><td>ดอกเบี้ยรับ ({{ rd.contract.interest.rate }}% × {{ rd.contract.duration.months }} ด.)</td><td class="r">{{ rd.interest_received|floatformat:2 }}</td></tr>
+  <tr><td>ค่าธรรมเนียมรับ</td><td class="r">{{ rd.fee_received|floatformat:2 }}</td></tr>
+  <tr class="grand"><td>รวมรับชำระ</td><td class="r">฿ {{ rd.total|floatformat:2 }}</td></tr>
+</table>
+{% endblock %}

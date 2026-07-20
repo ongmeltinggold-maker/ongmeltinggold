@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+/staticfiles/
+/media/
+*.log
+
+# Secrets / config
+.env
+deploy/.env
+deploy/nginx/certs/
+deploy/backups/
+
+# ข้อมูลลูกค้าจริง (PDPA) — ห้าม commit ขึ้น GitHub
+migration/customers_legacy.json
+migration/pawn_contracts_legacy.json
+
+# packaging / OS
+*.tar.gz
+.DS_Store

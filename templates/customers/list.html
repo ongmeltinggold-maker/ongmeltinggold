@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}ลูกค้า / KYC{% endblock %}
+{% block heading %}ลูกค้า / KYC{% endblock %}
+{% block crumb %}ข้อมูล / ลูกค้า ({{ total }} ราย){% endblock %}
+{% block content %}
+<div class="card">
+  <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+    <form method="get" style="flex:1;display:flex;gap:10px">
+      <input name="q" value="{{ q }}" placeholder="ค้นชื่อ / เลขบัตร / เบอร์โทร">
+      <button class="btn" type="submit">ค้นหา</button>
+    </form>
+    <a class="btn ghost" href="{% url 'customer_add' %}">＋ เพิ่มลูกค้าใหม่</a>
+  </div>
+  <table>
+    <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>เลขบัตร</th><th>เบอร์โทร</th><th>ยศ</th></tr></thead>
+    <tbody>
+    {% for c in customers %}
+      <tr><td>{{ forloop.counter }}</td><td>{{ c.name_th }}</td><td>{{ c.national_id }}</td><td>{{ c.tel }}</td>
+        <td>{% if c.vip %}<span class="vip">★ VIP</span>{% else %}{{ c.member_rank.name|default:"ทั่วไป" }}{% endif %}</td></tr>
+    {% empty %}<tr><td colspan="5" class="muted">ไม่พบลูกค้า</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

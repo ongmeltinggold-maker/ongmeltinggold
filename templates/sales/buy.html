@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}รับซื้อเข้าร้าน{% endblock %}
+{% block heading %}รับซื้อเข้าร้าน{% endblock %}
+{% block crumb %}ธุรกรรม / รับซื้อ{% endblock %}
+{% block content %}
+<form method="post" action="{% url 'buy' %}">{% csrf_token %}
+<div class="grid g2">
+  <div class="card">
+    <h3>รับซื้อจากลูกค้า</h3>
+    <div id="inputs"
+         hx-get="{% url 'buy_calc' %}" hx-target="#calc" hx-swap="innerHTML"
+         hx-trigger="change, keyup changed delay:300ms" hx-include="closest form">
+      <div class="row row-3">
+        <div><label>ลูกค้า</label>
+          <select name="customer"><option value="">— ขายทั่วไป —</option>
+            {% for c in customers %}<option value="{{ c.id }}">{{ c.name_th }}{% if c.vip %} ★VIP{% endif %}</option>{% endfor %}
+          </select></div>
+        <div><label>ประเภทโลหะ</label>
+          <select name="metal">{% for m in metals %}<option value="{{ m.id }}">{{ m.name_th }}</option>{% endfor %}</select></div>
+        <div><label>% เนื้อโลหะ</label><input name="purity" type="number" step="0.01" value="96.5"></div>
+      </div>
+      <div class="row row-3">
+        <div><label>น้ำหนัก (กรัม)</label><input name="weight" type="number" step="0.001" placeholder="0.000"></div>
+        <div><label>ราคาตั้งต้น (เว้นว่าง=อัตโนมัติ)</label><input name="base_price" type="number" step="0.01" placeholder="อัตโนมัติจากราคาทอง/ตั้งเอง"></div>
+        <div><label>ค่าบริการ % (1–10)</label><input name="fee_percent" type="number" step="0.1" value="{{ fee_default }}"></div>
+      </div>
+      <div class="row row-2">
+        <div><label>ลูกค้า VIP (ไม่หักค่าบริการ)</label>
+          <select name="is_vip"><option value="0">ไม่</option><option value="1">ใช่ (VIP)</option></select></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn wide" type="submit">บันทึกรับซื้อ + เพิ่มสต็อก</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>ผลคำนวณ (สด)</h3>
+    <div id="calc"><div class="calcbox"><div class="cl grand"><span>ยอดสุทธิ</span><span class="amt gold">฿ 0.00</span></div></div></div>
+    <p class="muted" style="font-size:12px;margin-top:12px">ทอง/นาก: floor(ราคา×0.0656×%)×น้ำหนัก · &lt;90% &amp; ไม่ใช่ VIP หักค่าบริการ · เงิน/Pt: ราคาตั้งเอง×% (ไม่หัก)</p>
+  </div>
+</div>
+</form>
+{% endblock %}

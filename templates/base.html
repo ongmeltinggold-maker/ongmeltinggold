@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}ONG หลอมทอง{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="{% static 'js/htmx.min.js' %}"></script>
+<style>
+:root{
+  --bg-0:#0a0e1a;--bg-1:#111931;--surface:rgba(255,255,255,.045);--surface-2:rgba(255,255,255,.07);
+  --line:rgba(255,255,255,.10);--line-gold:rgba(231,196,106,.35);
+  --gold:#e7c46a;--gold-hi:#f8e4a8;--gold-deep:#b8892f;--ink:#eef2fb;--muted:#93a0ba;
+  --success:#57d38c;--danger:#ff6b6b;--info:#6ea8ff;--shadow:0 18px 50px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:'Kanit',sans-serif;font-weight:300;color:var(--ink);
+  background:radial-gradient(1100px 640px at 80% -10%,rgba(231,196,106,.14),transparent 60%),linear-gradient(160deg,var(--bg-0),var(--bg-1));min-height:100vh}
+a{color:inherit;text-decoration:none}
+.gold{background:linear-gradient(92deg,var(--gold-hi),var(--gold),var(--gold-deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--muted)}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:rgba(231,196,106,.28);border-radius:9px}
+/* layout */
+.layout{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.side{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border-right:1px solid var(--line);padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:12px;padding:4px 8px 16px}
+.coin{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#6b4a13;
+  background:radial-gradient(circle at 34% 30%,#fff5d8,#f8e4a8 18%,#e7c46a 50%,#b8892f 100%);box-shadow:inset 0 0 0 3px rgba(255,255,255,.3),0 8px 18px -6px rgba(184,137,47,.6);animation:spin 8s linear infinite}
+@keyframes spin{to{transform:rotateY(360deg)}}
+.brand .t{font-weight:600;font-size:15px;line-height:1.15}.brand .t small{display:block;font-size:10.5px;color:var(--muted);font-weight:300}
+.nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;color:var(--muted);font-size:13.5px;margin:2px 0;border:1px solid transparent}
+.nav a:hover{background:var(--surface);color:var(--ink)}
+.nav a.on{background:linear-gradient(92deg,rgba(231,196,106,.18),rgba(231,196,106,.05));color:var(--gold);border-color:var(--line-gold)}
+.nav .grp{font-size:10.5px;color:#61708c;margin:14px 10px 4px;letter-spacing:1px}
+.nav .ic{width:20px;text-align:center}
+.main{padding:22px 28px 60px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.topbar h2{margin:0;font-size:21px;font-weight:600}.crumb{font-size:12px;color:var(--muted)}
+.tk{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:7px 13px;font-size:12px;display:inline-block;margin-left:8px}
+.tk b{font-weight:600}.up b{color:var(--success)}.down b{color:var(--danger)}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-deep));display:grid;place-items:center;color:#3a2a08;font-weight:600;margin-left:10px}
+/* components */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);margin-bottom:18px}
+.card h3{margin:0 0 14px;font-size:15px;font-weight:500}
+.grid{display:grid;gap:18px}.g2{grid-template-columns:1.3fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1000px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}@media(max-width:720px){.layout{grid-template-columns:1fr}.side{display:none}.g2,.g3,.g4{grid-template-columns:1fr}}
+label{display:block;font-size:12.5px;color:var(--muted);margin:10px 0 5px}
+input,select,textarea{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:rgba(0,0,0,.25);color:var(--ink);font-family:inherit;font-size:14px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--line-gold);box-shadow:0 0 0 4px rgba(231,196,106,.13)}
+.btn{border:none;font-family:inherit;cursor:pointer;border-radius:11px;padding:11px 18px;font-size:14px;font-weight:500;color:#3a2a08;background:linear-gradient(92deg,var(--gold-hi),var(--gold),var(--gold-deep));box-shadow:0 10px 24px -8px rgba(231,196,106,.55)}
+.btn:hover{transform:translateY(-1px)}.btn.wide{width:100%}.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--line-gold);box-shadow:none}
+.row{display:grid;gap:12px}.row-3{grid-template-columns:repeat(3,1fr)}.row-2{grid-template-columns:1fr 1fr}.row-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:760px){.row-3,.row-4{grid-template-columns:1fr 1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{background:rgba(255,255,255,.04);color:#c5cfe0;font-weight:500}
+.pill{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(231,196,106,.14);color:var(--gold)}
+.pill.g{background:rgba(87,211,140,.14);color:var(--success)}
+.vip{background:linear-gradient(92deg,var(--gold),var(--gold-deep));color:#3a2a08;font-weight:600;font-size:11px;padding:3px 10px;border-radius:20px}
+.calcbox{background:linear-gradient(160deg,rgba(231,196,106,.10),rgba(231,196,106,.02));border:1px solid var(--line-gold);border-radius:16px;padding:18px}
+.cl{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:var(--muted)}.cl b{color:var(--ink);font-weight:500}
+.cl.grand{border-top:1px solid var(--line-gold);margin-top:6px;padding-top:10px}.cl.grand .amt{font-size:28px;font-weight:700}
+.msg{padding:10px 14px;border-radius:11px;margin-bottom:14px;font-size:13px}
+.msg.ok{background:rgba(87,211,140,.12);border:1px solid rgba(87,211,140,.3);color:#bff2d4}
+.msg.err{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.3);color:#ffd0d0}
+.stat{position:relative}.stat .lab{font-size:12.5px;color:var(--muted)}.stat .val{font-size:26px;font-weight:600;margin-top:4px}
+</style>
+</head>
+<body>
+{% if user.is_authenticated %}
+<div class="layout">
+  <aside class="side">
+    <div class="brand"><div class="coin">O</div>
+      <div class="t">{{ site_company.name|default:"ONG หลอมทอง" }}<small>{{ site_company.station|default:"สำนักงานใหญ่" }}</small></div></div>
+    <nav class="nav">
+      <a href="{% url 'dashboard' %}" class="{% block nav_dash %}{% endblock %}"><span class="ic">◈</span> แดชบอร์ด</a>
+      {% if menu_transaction %}<div class="grp">ธุรกรรม</div>{% for f in menu_transaction %}
+        <a href="{{ f.href }}" class="{% if f.code == active_feature %}on{% endif %}"><span class="ic">{{ f.icon }}</span> {{ f.name_th }}</a>{% endfor %}{% endif %}
+      {% if menu_data %}<div class="grp">ข้อมูล</div>{% for f in menu_data %}
+        <a href="{{ f.href }}" class="{% if f.code == active_feature %}on{% endif %}"><span class="ic">{{ f.icon }}</span> {{ f.name_th }}</a>{% endfor %}{% endif %}
+      {% if menu_report %}<div class="grp">รายงาน</div>{% for f in menu_report %}
+        <a href="{{ f.href }}" class="{% if f.code == active_feature %}on{% endif %}"><span class="ic">{{ f.icon }}</span> {{ f.name_th }}</a>{% endfor %}{% endif %}
+      <div class="grp">ระบบ</div>
+      <a href="/admin/"><span class="ic">⚙️</span> ตั้งค่า (Admin)</a>
+      <a href="{% url 'logout' %}"><span class="ic">⎋</span> ออกจากระบบ</a>
+    </nav>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div><h2>{% block heading %}{% endblock %}</h2><div class="crumb">{% block crumb %}{% endblock %}</div></div>
+      <div>
+        {% if site_gold %}<span class="tk up">ขายออก <b>{{ site_gold.bar_sell|floatformat:0 }}</b></span>
+        <span class="tk down">รับซื้อ <b>{{ site_gold.bar_buy|floatformat:0 }}</b></span>{% endif %}
+        <span class="avatar">{{ user.username|first|upper }}</span>
+      </div>
+    </div>
+    {% if messages %}{% for m in messages %}<div class="msg {% if m.tags == 'error' %}err{% else %}ok{% endif %}">{{ m }}</div>{% endfor %}{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% else %}{% block full %}{% endblock %}{% endif %}
+</body>
+</html>
